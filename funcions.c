@@ -41,30 +41,30 @@ int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
 void nou_perfil() {
     static int id = 0;
 
-    usuaris->id = id;
+    usuaris[id].id = id;
 
 
     printf("Indica el teu nom: ");
-    fgets(usuaris->nom, MAX_STR, stdin);
-    usuaris->nom[strcspn(usuaris->nom, "\n")] = 0;
+    fgets(usuaris[id].nom, MAX_STR, stdin);
+    usuaris[id].nom[strcspn(usuaris[id].nom, "\n")] = 0;
 
     printf("Indica la teva poblacio: ");
-    fgets(usuaris->poblacio, MAX_STR, stdin);
-    usuaris->poblacio[strcspn(usuaris->poblacio, "\n")] = 0;
+    fgets(usuaris[id].poblacio, MAX_STR, stdin);
+    usuaris[id].poblacio[strcspn(usuaris[id].poblacio, "\n")] = 0;
 
     printf("Indica el teu sexe (H/D): ");
-    scanf(" %c", &usuaris->sexe);
+    scanf(" %c", &usuaris[id].sexe);
     getchar(); 
 
     printf("Indica la teva data de naixement (DD/MM/AAAA): ");
-    fgets(usuaris->data_naixement, MAX_STR, stdin);
-    usuaris->data_naixement[strcspn(usuaris->data_naixement, "\n")] = 0;
+    fgets(usuaris[id].data_naixement, MAX_STR, stdin);
+    usuaris[id].data_naixement[strcspn(usuaris[id].data_naixement, "\n")] = 0;
 
     id++;
 }
 void mostra_perfil(int id) {
     if (id < 0 || id >= MAX_USERS || usuaris[id].id == -1) {
-        printf("Error: ID del usuari no vàlid.\n");
+        printf("Error: ID del usuari no valid.\n");
         return;
     }
 
