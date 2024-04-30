@@ -15,9 +15,9 @@ typedef struct {
     char data_naixement[MAX_STR];
 } Usuari;
 
-Usuari usuaris[MAX_USERS];
-
-struct Usuari * usuari =&usuaris[id];
+extern Usuari usuaris[MAX_USERS];
 
 int llegir_usuaris(Usuari usuaris[], int *num_usuaris);
 int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris);
+void mostra_perfil(int id);
+

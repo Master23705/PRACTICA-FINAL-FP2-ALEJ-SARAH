@@ -42,7 +42,6 @@ void nou_perfil() {
     static int id = 0;
 
     usuaris->id = id;
-    struct Usuari * usuari =&usuaris[id];
 
 
     printf("Indica el teu nom: ");
@@ -70,9 +69,9 @@ void mostra_perfil(int id) {
     }
 
 
-    printf("Perfil de l'usuari amb ID %d:\n", usuaris->id);
-    printf("Nom: %s\n", usuaris->nom);
-    printf("Poblacio: %s\n", usuaris->poblacio);
-    printf("Sexe: %c\n", usuaris->sexe);
-    printf("Data de naixement: %s\n", usuaris->data_naixement);
+    printf("Perfil de l'usuari amb ID %d:\n", usuaris[id].id);
+    printf("Nom: %s\n", usuaris[id].nom);
+    printf("Poblacio: %s\n", usuaris[id].poblacio);
+    printf("Sexe: %s\n", usuaris[id].sexe);
+    printf("Data de naixement: %s\n", usuaris[id].data_naixement);
 }

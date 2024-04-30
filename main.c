@@ -15,13 +15,9 @@ int main() {
         return 1; 
     }
 
-    printf("Usuaris llegits correctament:\n");               
+              
     for (int i = 0; i < num_usuaris; i++) {
-        printf("Usuari %d:\n", i+1); 
-        printf("  Nom: %s\n", usuaris[i].nom);
-        printf("  Sexe: %s\n", usuaris[i].sexe);
-        printf("  Poblacio: %s\n", usuaris[i].poblacio);
-        printf("  Data naixement: %s\n", usuaris[i].data_naixement);
+        void mostra_perfil(int id);
     } 
 
     printf("\nDistancias llegides correctament:\n");
