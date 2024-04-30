@@ -10,6 +10,7 @@ struct Usuari{
     char nom[MAX_STR];
     char poblacio[MAX_STR];
     char sexe;
+    
     char data_naixement[MAX_STR];
 };
 

@@ -1,9 +1,8 @@
-#include "funcions.h"
+#include "FUNCIONS.h"
 
 int main() {
 
     int num_usuaris;
-    Usuari usuaris[MAX_USERS];
     int distancies[MAX_USERS][MAX_USERS];
     
     if (llegir_usuaris(usuaris, &num_usuaris) != 0) {
