@@ -31,6 +31,7 @@ int main() {
             printf("%d ", distancies[i][j]);
         }
         printf("\n");
+        printf("holaaaaa");
     }
     
     return 0;
