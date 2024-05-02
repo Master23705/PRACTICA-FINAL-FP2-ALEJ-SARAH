@@ -1,4 +1,9 @@
 #include "FUNCIONS.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+Usuari usuaris[MAX_USERS];
 
 int llegir_usuaris(Usuari usuaris[], int *num_usuaris) {
     FILE *fitxer = fopen("usuaris.txt", "r");
