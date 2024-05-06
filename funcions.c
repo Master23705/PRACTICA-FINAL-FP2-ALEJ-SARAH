@@ -1,4 +1,9 @@
 #include "FUNCIONS.H"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+Usuari usuaris[MAX_USERS];
 
 int llegir_usuaris(Usuari usuaris[], int *num_usuaris) {
     FILE *fitxer = fopen("usuaris.txt", "r");
@@ -38,8 +43,8 @@ int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
     return 0; 
 }
 
-void nou_perfil() {
-    static int id = 0;
+int nou_perfil() {
+    static int id = 10;
 
     usuaris[id].id = id;
 
@@ -53,8 +58,8 @@ void nou_perfil() {
     usuaris[id].poblacio[strcspn(usuaris[id].poblacio, "\n")] = 0;
 
     printf("Indica el teu sexe (H/D): ");
-    scanf(" %c", &usuaris[id].sexe);
-    getchar(); 
+    fgets(usuaris[id].sexe, MAX_STR, stdin);
+    usuaris[id].sexe[strcspn(usuaris[id].sexe, "\n")] = 0;
 
     printf("Indica la teva data de naixement (DD/MM/AAAA): ");
     fgets(usuaris[id].data_naixement, MAX_STR, stdin);
@@ -63,15 +68,24 @@ void nou_perfil() {
     id++;
 }
 void mostra_perfil(int id) {
-    if (id < 0 || id >= MAX_USERS || usuaris[id].id == -1) {
+    if (id < 0 || id > MAX_USERS || usuaris[id].id == -1) {
         printf("Error: ID del usuari no valid.\n");
         return;
     }
 
 
-    printf("Perfil de l'usuari amb ID %d:\n", usuaris[id].id);
+    printf("\nPerfil de l'usuari amb ID %d:\n", usuaris[id].id);
     printf("Nom: %s\n", usuaris[id].nom);
     printf("Poblacio: %s\n", usuaris[id].poblacio);
     printf("Sexe: %s\n", usuaris[id].sexe);
     printf("Data de naixement: %s\n", usuaris[id].data_naixement);
+}
+
+void mostra_menu() {
+        printf("\nMenu:\n");
+        printf("1. El meu perfil\n");
+        printf("2. Les meves amistats\n");
+        printf("3. Afegir amistats\n");
+        printf("4. Sortitr\n");
+        printf("Selecciona una opcio:");
 }

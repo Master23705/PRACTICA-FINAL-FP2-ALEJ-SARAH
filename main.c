@@ -1,10 +1,12 @@
 #include "FUNCIONS.h"
 
 int main() {
-
+    int opcion;
     int num_usuaris;
     int distancies[MAX_USERS][MAX_USERS];
     
+    nou_perfil();
+
     if (llegir_usuaris(usuaris, &num_usuaris) != 0) {
         printf("Error al llegir l'arxiu de usuaris. Terminant el programa.\n");
         return 1;
@@ -15,18 +17,30 @@ int main() {
         return 1; 
     }
 
-              
-    for (int i = 0; i < num_usuaris; i++) {
-        void mostra_perfil(int id);
-    } 
 
-    printf("\nDistancias llegides correctament:\n");
-    for (int i = 0; i < num_usuaris; i++) {
-        for (int j = 0; j < num_usuaris; j++) {
-            printf("%d ", distancies[i][j]);
+    do {
+        mostra_menu();
+        scanf("%d", &opcion);
+        getchar(); // Netejar buffer de entrada
+
+        switch (opcion) {
+            case 1:
+                mostra_perfil(MAX_USERS);
+                break;
+            case 2:
+
+                break;
+            case 3:
+
+                break;
+            case 4:
+                printf("Adeu!\n");
+                return 0; //Sortir del programa
+            default:
+                printf("Opcio no valida, tria una valida");
+                break;
         }
-        printf("\n");
-    }
+    } while (1); //Bucle infint amb el cual es pot surtir amb el return(0) de el case 4
     
     return 0;
-} 
+}
