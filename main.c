@@ -5,7 +5,7 @@ int main() {
     int num_usuaris;
     int distancies[MAX_USERS][MAX_USERS];
     
-    nou_perfil();
+    //nou_perfil();
 
     if (llegir_usuaris(usuaris, &num_usuaris) != 0) {
         printf("Error al llegir l'arxiu de usuaris. Terminant el programa.\n");
