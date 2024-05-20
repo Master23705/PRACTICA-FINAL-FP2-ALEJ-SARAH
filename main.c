@@ -1,11 +1,13 @@
 #include "FUNCIONS.h"
 
 int main() {
-    int opcion;
+    int opcion, id_usuari; 
     int num_usuaris;
     int distancies[MAX_USERS][MAX_USERS];
     
-    //nou_perfil();
+    printf("escogeix un ID de usuari\n");
+    scanf("%d", &id_usuari);
+    getchar();
 
     if (llegir_usuaris(usuaris, &num_usuaris) != 0) {
         printf("Error al llegir l'arxiu de usuaris. Terminant el programa.\n");
@@ -17,7 +19,6 @@ int main() {
         return 1; 
     }
 
-
     do {
         mostra_menu();
         scanf("%d", &opcion);
@@ -25,13 +26,13 @@ int main() {
 
         switch (opcion) {
             case 1:
-                mostra_perfil(MAX_USERS);
+                mostra_perfil(id_usuari);
                 break;
             case 2:
-
+                mostrar_amistats(id_usuari, distancies, num_usuaris);
                 break;
             case 3:
-
+            
                 break;
             case 4:
                 printf("Adeu!\n");
