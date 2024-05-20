@@ -23,3 +23,5 @@ void mostra_perfil(int id);
 int nou_perfil();
 void mostra_menu();
 void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris);
+int* usuaris_propers(int id, int distancies[][MAX_USERS]);
+void afegir_amistat(int id, int distancies[][MAX_USERS], int id_nova_amistat);

@@ -60,6 +60,7 @@ void mostra_menu() {
 }
 
 void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris) {
+    
     if (id < 0 || id >= MAX_USERS || usuaris[id].id == -1) {
         printf("Error: ID de l'usuari no valid.\n");
         return;
@@ -71,4 +72,46 @@ void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris) {
             mostra_perfil(i - 1);
         }
     }
+}
+
+typedef struct {
+    int id;
+    int distancia;
+} Proper;
+
+int comparar(const void *a, const void *b) {
+    Proper *usuariA = (Proper *)a;
+    Proper *usuariB = (Proper *)b;
+    return usuariA->distancia - usuariB->distancia;
+}
+
+int* usuaris_propers(int id, int distancies[][MAX_USERS]) {
+    Proper propers[MAX_USERS];
+    int count = 0;
+
+    for (int i = 0; i < MAX_USERS; i++) {
+        if (i != id && distancies[id][i] != -1 && distancies[id][i] != 0) {
+            propers[count].id = i;
+            propers[count].distancia = distancies[id][i];
+            count++;
+        }
+    }
+
+    qsort(propers, count, sizeof(Proper), comparar);
+
+    // Crear una lista para guardar los IDs de los usuarios cercanos
+    int* ids_propers = malloc(count * sizeof(int));
+    for (int i = 0; i < count; i++) {
+        ids_propers[i] = propers[i].id - 1;
+        mostra_perfil(ids_propers[i]);
+    }
+
+    return ids_propers;
+}
+
+void afegir_amistat(int id_usuari, int distancies[][MAX_USERS], int id_nova_amistat) {
+    id_nova_amistat++;
+    
+    distancies[id_usuari][id_nova_amistat] = -1;
+    distancies[id_nova_amistat][id_usuari] = -1;
 }
