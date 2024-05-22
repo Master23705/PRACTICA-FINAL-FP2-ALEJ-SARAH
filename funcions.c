@@ -114,11 +114,10 @@ int* usuaris_propers(int id, int distancies[][MAX_USERS]) {
 void afegir_amistat(int id_usuari, int distancies[][MAX_USERS]) {
     int id_nova_amistat;
     printf("Vols afegir amistat amb algun d'aquests usuaris? ");
-    char resposta[3];
+    char resposta[2];
     scanf("%s", resposta);
     int es_si = ((resposta[0] == 's' || resposta[0] == 'S') &&
-             (resposta[1] == 'i' || resposta[1] == 'I') &&
-             resposta[2] == '\0');
+             (resposta[1] == 'i' || resposta[1] == 'I'));
 
     if (es_si) {
         printf("Introdueix l'ID de l'usuari amb el que vols afegir amistat: ");
