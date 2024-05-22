@@ -79,66 +79,14 @@ void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris) {
     }
 }
 
-
-int comparar(const void *a, const void *b) {
-    Proper *usuariA = (Proper *)a;
-    Proper *usuariB = (Proper *)b;
-    return usuariA->distancia - usuariB->distancia;
-}
-
-int* usuaris_propers(int id, int distancies[][MAX_USERS]) {
-    Proper propers[MAX_USERS];
-    int count = 0;
-    printf("\nUsuaris propers a tu:\n");
-    printf("\n********************************\n");
-    for (int i = 0; i < MAX_USERS; i++) {
-        if (i != id && distancies[id][i] != -1 && distancies[id][i] != 0) {
-            propers[count].id = i;
-            propers[count].distancia = distancies[id][i];
-            count++;
-        }
-    }
-
-    mergeSort(propers, 0, count - 1);
-
-    // Crear una lista para guardar los IDs de los usuarios cercanos
-    int* ids_propers = malloc(count * sizeof(int));
-    for (int i = 0; i < count; i++) {
-        ids_propers[i] = propers[i].id - 1;
-        mostra_perfil(ids_propers[i]);
-    }
-
-    return ids_propers;
-}
-
-void afegir_amistat(int id_usuari, int distancies[][MAX_USERS]) {
-    int id_nova_amistat;
-    printf("Vols afegir amistat amb algun d'aquests usuaris? ");
-    char resposta[2];
-    scanf("%s", resposta);
-    int es_si = ((resposta[0] == 's' || resposta[0] == 'S') &&
-             (resposta[1] == 'i' || resposta[1] == 'I'));
-
-    if (es_si) {
-        printf("Introdueix l'ID de l'usuari amb el que vols afegir amistat: ");
-        scanf("%d", &id_nova_amistat);
-        id_nova_amistat++;
-        distancies[id_usuari][id_nova_amistat] = -1;
-        distancies[id_nova_amistat][id_usuari] = -1;
-        printf("S'ha introduit l'usuari amb ID %d com a amistat.\n", id_nova_amistat - 1);
-    }
-}
-
-void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int id_amistat_a_eliminar) {
-    // Incrementamos el índice de la nueva amistad
-    id_amistat_a_eliminar++;
-    
-    // Cambiamos el valor de la distancia a 5
-    distancies[id_usuari][id_amistat_a_eliminar] = 5;
-    distancies[id_amistat_a_eliminar][id_usuari] = 5;
-}
-
-
+/**
+ * Funció auxiliar per a l'ordenació per barreja.
+ * 
+ * @param arr Array d'usuaris propers a ordenar.
+ * @param l Índex esquerre del subarray a ordenar.
+ * @param m Índex mitjà del subarray a ordenar.
+ * @param r Índex dret del subarray a ordenar.
+ */
 void merge(Proper arr[], int p_i, int m, int p_f) {
     int esq = p_i, drt = m + 1, k;
     Proper temp[MAX_USERS];
@@ -172,6 +120,13 @@ void merge(Proper arr[], int p_i, int m, int p_f) {
     }
 }
 
+/**
+ * Ordena un array d'usuaris propers utilitzant l'algorisme d'ordenació per barreja (merge sort).
+ * 
+ * @param arr Array d'usuaris propers a ordenar.
+ * @param l Índex esquerre del subarray a ordenar.
+ * @param r Índex dret del subarray a ordenar.
+ */
 void mergeSort(Proper arr[], int l, int r) {
     if (l < r) {
         int m = l + (r - l) / 2;
@@ -181,5 +136,90 @@ void mergeSort(Proper arr[], int l, int r) {
 
         merge(arr, l, m, r);
     }
+}
+
+/**
+ * Funció de comparació per utilitzar amb qsort().
+ * Compara dos elements del tipus Proper segons la seva distància.
+ * 
+ * @param a Punter al primer element a comparar (de tipus Proper*).
+ * @param b Punter al segon element a comparar (de tipus Proper*).
+ * @return Un enter negatiu si a ha de ser abans que b, un enter positiu si b ha de ser abans que a, zero si són iguals.
+ */
+int comparar(const void *a, const void *b) {
+    Proper *usuariA = (Proper *)a;
+    Proper *usuariB = (Proper *)b;
+    return usuariA->distancia - usuariB->distancia;
+}
+
+/**
+ * Troba els usuaris més propers a un usuari donat el seu ID.
+ * 
+ * @param id Identificador de l'usuari.
+ * @param distancies Matriu de distàncies entre usuaris.
+ * @return Punter a un array d'enters amb els IDs dels usuaris més propers.
+ */
+int* usuaris_propers(int id, int distancies[][MAX_USERS]) {
+    Proper propers[MAX_USERS];
+    int count = 0;
+    printf("\nUsuaris propers a tu:\n");
+    printf("\n********************************\n");
+    for (int i = 0; i < MAX_USERS; i++) {
+        if (i != id && distancies[id][i] != -1 && distancies[id][i] != 0) {
+            propers[count].id = i;
+            propers[count].distancia = distancies[id][i];
+            count++;
+        }
+    }
+
+    mergeSort(propers, 0, count - 1);
+
+    // Crear una llista para guardar els IDs de los usuaris propers
+    int* ids_propers = malloc(count * sizeof(int));
+    for (int i = 0; i < count; i++) {
+        ids_propers[i] = propers[i].id - 1;
+        mostra_perfil(ids_propers[i]);
+    }
+
+    return ids_propers;
+}
+
+/**
+ * Afegeix una amistat entre usuaris.
+ * 
+ * @param id Identificador de l'usuari principal.
+ * @param distancies Matriu de distàncies entre usuaris.
+ */
+void afegir_amistat(int id_usuari, int distancies[][MAX_USERS]) {
+    int id_nova_amistat;
+    printf("Vols afegir amistat amb algun d'aquests usuaris? ");
+    char resposta[2];
+    scanf("%s", resposta);
+    int es_si = ((resposta[0] == 's' || resposta[0] == 'S') &&
+             (resposta[1] == 'i' || resposta[1] == 'I'));
+
+    if (es_si) {
+        printf("Introdueix l'ID de l'usuari amb el que vols afegir amistat: ");
+        scanf("%d", &id_nova_amistat);
+        id_nova_amistat++;
+        distancies[id_usuari][id_nova_amistat] = -1;
+        distancies[id_nova_amistat][id_usuari] = -1;
+        printf("S'ha introduit l'usuari amb ID %d com a amistat.\n", id_nova_amistat - 1);
+    }
+}
+
+/**
+ * Elimina una amistat entre usuaris.
+ * 
+ * @param id_usuari Identificador de l'usuari principal.
+ * @param distancies Matriu de distàncies entre usuaris.
+ * @param id_amistat_a_eliminar Identificador de l'amistat a eliminar.
+ */
+void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int id_amistat_a_eliminar) {
+    id_amistat_a_eliminar++;
+    
+    // Decisió de disseny: enlloc de posar la distància a 0, posem la distància a 5 per si després es volen tornar a afegir com a amistats
+    distancies[id_usuari][id_amistat_a_eliminar] = 5;
+    distancies[id_amistat_a_eliminar][id_usuari] = 5;
 }
 
