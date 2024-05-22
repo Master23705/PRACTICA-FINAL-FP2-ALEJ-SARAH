@@ -7,9 +7,9 @@ int main() {
 
     
     printf("Benvingut a FPBook!\n");
-    printf("Introdueix un ID de usuari\n");
+    printf("Introdueix el teu ID: \n");
     scanf("%d", &id_usuari);
-    getchar(); // Netejar buffer de entrada
+   
 
     if (llegir_usuaris(usuaris, &num_usuaris) != 0) {
         printf("Error al llegir l'arxiu de usuaris. Terminant el programa.\n");
@@ -24,37 +24,35 @@ int main() {
     do {
         mostra_menu();
         scanf("%d", &opcion);
-        getchar(); // Netejar buffer de entrada
+        
 
         switch (opcion) {
             case 1:
+                printf("\n********************************\n");
                 mostra_perfil(id_usuari);
                 break;
             case 2:
                 mostrar_amistats(id_usuari, distancies, num_usuaris);
                 break;
             case 3:
-                printf("Usuaris propers a tu:\n");
                 usuaris_propers(id_usuari, distancies);
-                printf("Vols afegir amistat amb algun d'aquests usuaris?");
-                char resposta[3];
-                scanf("%s", resposta);
-                if (strcmp(resposta, "si") == 0 || strcmp(resposta, "Si") == 0 || strcmp(resposta, "SI") == 0) {
-                    printf("Introdueix l'ID de l'usuari amb el que vols afegir amistat: ");
-                    int id_nova_amistat;
-                    scanf("%d", &id_nova_amistat);
-                    afegir_amistat(id_usuari, distancies, id_nova_amistat);
-                }
+                afegir_amistat(id_usuari, distancies);
                 break;
             case 4:
+                printf("Introdueix l'ID de l'usuari del qual vols eliminar l'amistat");
+                int id_elim_amis; 
+                mostrar_amistats(id_usuari, distancies, num_usuaris);
+                scanf("%d", &id_elim_amis);
+                eliminar_amistats(id_usuari,distancies, id_elim_amis);
+                break;
+            case 5:
                 printf("Adeu!\n");
                 return 0; //Sortir del programa
             default:
-                printf("Opcio no valida, tria una valida");
+                printf("\nOpcio no valida, tria una opcio valida siusplau\n");
                 break;
         }
     } while (1); //Bucle infint amb el cual es pot surtir amb el return(0) de el case 4
     
     return 0;
 }
-
