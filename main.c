@@ -9,7 +9,7 @@ int main() {
     printf("Benvingut a FPBook!\n");
     printf("Introdueix un ID de usuari\n");
     scanf("%d", &id_usuari);
-    getchar(); // Netejar buffer de entrada
+   
 
     if (llegir_usuaris(usuaris, &num_usuaris) != 0) {
         printf("Error al llegir l'arxiu de usuaris. Terminant el programa.\n");
@@ -24,7 +24,7 @@ int main() {
     do {
         mostra_menu();
         scanf("%d", &opcion);
-        getchar(); // Netejar buffer de entrada
+        
 
         switch (opcion) {
             case 1:
@@ -34,7 +34,6 @@ int main() {
                 mostrar_amistats(id_usuari, distancies, num_usuaris);
                 break;
             case 3:
-                printf("Usuaris propers a tu:\n");
                 usuaris_propers(id_usuari, distancies);
                 printf("Vols afegir amistat amb algun d'aquests usuaris?");
                 char resposta[3];
@@ -47,6 +46,13 @@ int main() {
                 }
                 break;
             case 4:
+                printf("Introdueix l'ID de l'usuari del qual vols eliminar l'amistat");
+                int id_elim_amis; 
+                mostrar_amistats(id_usuari, distancies, num_usuaris);
+                scanf("%d", &id_elim_amis);
+                eliminar_amistats(id_usuari,distancies, id_elim_amis);
+                break;
+            case 5:
                 printf("Adeu!\n");
                 return 0; //Sortir del programa
             default:

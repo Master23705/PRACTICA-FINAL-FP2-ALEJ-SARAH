@@ -55,7 +55,8 @@ void mostra_menu() {
     printf("1. El meu perfil\n");
     printf("2. Les meves amistats\n");
     printf("3. Afegir amistats\n");
-    printf("4. Sortir\n");
+    printf("4. Eliminar amistats\n");
+    printf("5. Sortir\n");
     printf("Selecciona una opcio: ");
 }
 
@@ -88,7 +89,7 @@ int comparar(const void *a, const void *b) {
 int* usuaris_propers(int id, int distancies[][MAX_USERS]) {
     Proper propers[MAX_USERS];
     int count = 0;
-
+    printf("Usuaris propers a tu:\n");
     for (int i = 0; i < MAX_USERS; i++) {
         if (i != id && distancies[id][i] != -1 && distancies[id][i] != 0) {
             propers[count].id = i;
@@ -114,4 +115,13 @@ void afegir_amistat(int id_usuari, int distancies[][MAX_USERS], int id_nova_amis
     
     distancies[id_usuari][id_nova_amistat] = -1;
     distancies[id_nova_amistat][id_usuari] = -1;
+}
+
+void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int id_amistat_a_eliminar) {
+    // Incrementamos el índice de la nueva amistad
+    id_amistat_a_eliminar++;
+    
+    // Cambiamos el valor de la distancia a 5
+    distancies[id_usuari][id_amistat_a_eliminar] = 5;
+    distancies[id_amistat_a_eliminar][id_usuari] = 5;
 }
