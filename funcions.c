@@ -26,13 +26,14 @@ int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
     if (fitxer == NULL) {
         return 1;
     }
-
+    // Leemos la primera línea y no hacemos nada con ella
+    fscanf(fitxer, "%d", &distancies[0][0]);
     for (int i = 0; i < num_usuaris; i++) {
         for (int j = 0; j < num_usuaris; j++) {
             fscanf(fitxer, "%d", &distancies[i][j]);
         }
     }
-
+    
     fclose(fitxer);
     return 0;
 }
@@ -138,19 +139,6 @@ void mergeSort(Proper arr[], int l, int r) {
     }
 }
 
-/**
- * Funció de comparació per utilitzar amb qsort().
- * Compara dos elements del tipus Proper segons la seva distància.
- * 
- * @param a Punter al primer element a comparar (de tipus Proper*).
- * @param b Punter al segon element a comparar (de tipus Proper*).
- * @return Un enter negatiu si a ha de ser abans que b, un enter positiu si b ha de ser abans que a, zero si són iguals.
- */
-int comparar(const void *a, const void *b) {
-    Proper *usuariA = (Proper *)a;
-    Proper *usuariB = (Proper *)b;
-    return usuariA->distancia - usuariB->distancia;
-}
 
 /**
  * Troba els usuaris més propers a un usuari donat el seu ID.
@@ -164,8 +152,9 @@ int* usuaris_propers(int id, int distancies[][MAX_USERS]) {
     int count = 0;
     printf("\nUsuaris propers a tu:\n");
     printf("\n********************************\n");
+    
     for (int i = 0; i < MAX_USERS; i++) {
-        if (i != id && distancies[id][i] != -1 && distancies[id][i] != 0) {
+        if (i != id && distancies[id][i] != -1) {
             propers[count].id = i;
             propers[count].distancia = distancies[id][i];
             count++;
@@ -173,11 +162,11 @@ int* usuaris_propers(int id, int distancies[][MAX_USERS]) {
     }
 
     mergeSort(propers, 0, count - 1);
-
+    
     // Crear una llista para guardar els IDs de los usuaris propers
     int* ids_propers = malloc(count * sizeof(int));
     for (int i = 0; i < count; i++) {
-        ids_propers[i] = propers[i].id - 1;
+        ids_propers[i] = propers[i].id;
         mostra_perfil(ids_propers[i]);
     }
 
@@ -222,4 +211,3 @@ void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int id_amista
     distancies[id_usuari][id_amistat_a_eliminar] = 5;
     distancies[id_amistat_a_eliminar][id_usuari] = 5;
 }
-
