@@ -5,6 +5,13 @@
 
 Usuari usuaris[MAX_USERS];
 
+/**
+ * @brief Llegeix els ususaris des d'un fitxer
+ * @param usuaris Array d'usuaris
+ * @param num_usuaris Punter al nombre d'usuaris
+ * @return 0 si llegeix correctament, 1 en cas d'error
+ */
+
 int llegir_usuaris(Usuari usuaris[], int *num_usuaris) {
     FILE *fitxer = fopen("usuaris.txt", "r");
     if (fitxer == NULL) {
@@ -20,6 +27,13 @@ int llegir_usuaris(Usuari usuaris[], int *num_usuaris) {
     fclose(fitxer);
     return 0;
 }
+
+/**
+ * @brief Llegeix les ditàncies des d'un fitxer
+ * @param distancies Matriu de distànceis entre usuaris
+ * @param num_usuaris Nombre d'usuaris
+ * @return 0 si llegeix correctament, 1 en cas d'error
+ */
 
 int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
     FILE *fitxer = fopen("propers.txt", "r");
@@ -38,12 +52,18 @@ int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
     return 0;
 }
 
+ /**
+ * @brief Mostra el perfil d'un usuari
+ * @param id ID de l'usuari
+ */
+
 void mostra_perfil(int id) {
     if (id < 0 || id >= MAX_USERS || usuaris[id].id == -1) {
         printf("Error: ID de l'usuari no valid.\n");
         return;
     }
 
+    printf("\n********************************\n");
     printf("Perfil de l'usuari amb ID %d:\n", usuaris[id].id);
     printf("Nom: %s\n", usuaris[id].nom);
     printf("Poblacio: %s\n", usuaris[id].poblacio);
@@ -51,6 +71,10 @@ void mostra_perfil(int id) {
     printf("Data de naixement: %s\n", usuaris[id].data_naixement);
     printf("\n********************************\n");
 }
+
+/**
+ * @brief Mostra el menú d'opcions
+ */
 
 void mostra_menu() {
     printf("\nMenu:\n");
@@ -64,6 +88,13 @@ void mostra_menu() {
     printf("Selecciona una opcio: ");
 }
 
+/**
+ * @brief Mostra les amistats d'un usuari
+ * @param id ID de l'usuari
+ * @param distancies Matriu de distancies entre usuaris
+ * @param num_usuaris Nombre d'usuaris
+ */
+
 void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris) {
     
     if (id < 0 || id >= MAX_USERS || usuaris[id].id == -1) {
@@ -75,7 +106,7 @@ void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris) {
     printf("\n********************************\n");
     for (int i = 0; i < num_usuaris; i++) {
         if (distancies[id][i] == -1) {  
-            mostra_perfil(i - 1);
+            mostra_perfil(i);
         }
     }
 }
@@ -181,7 +212,7 @@ int* usuaris_propers(int id, int distancies[][MAX_USERS]) {
  */
 void afegir_amistat(int id_usuari, int distancies[][MAX_USERS]) {
     int id_nova_amistat;
-    printf("Vols afegir amistat amb algun d'aquests usuaris? ");
+    printf("Vols afegir amistat amb algun d'aquests usuaris? (si/no)");
     char resposta[2];
     scanf("%s", resposta);
     int es_si = ((resposta[0] == 's' || resposta[0] == 'S') &&
@@ -190,10 +221,9 @@ void afegir_amistat(int id_usuari, int distancies[][MAX_USERS]) {
     if (es_si) {
         printf("Introdueix l'ID de l'usuari amb el que vols afegir amistat: ");
         scanf("%d", &id_nova_amistat);
-        id_nova_amistat++;
         distancies[id_usuari][id_nova_amistat] = -1;
         distancies[id_nova_amistat][id_usuari] = -1;
-        printf("S'ha introduit l'usuari amb ID %d com a amistat.\n", id_nova_amistat - 1);
+        printf("S'ha introduit l'usuari amb ID %d com a amistat.\n", id_nova_amistat);
     }
 }
 
@@ -204,10 +234,14 @@ void afegir_amistat(int id_usuari, int distancies[][MAX_USERS]) {
  * @param distancies Matriu de distàncies entre usuaris.
  * @param id_amistat_a_eliminar Identificador de l'amistat a eliminar.
  */
-void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int id_amistat_a_eliminar) {
-    id_amistat_a_eliminar++;
+void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS]) {
+    int id_elim_amis;
     
+    printf("Introdueix l'ID de l'usuari del qual vols eliminar l'amistat:");
+    scanf("%d", &id_elim_amis);
+
     // Decisió de disseny: enlloc de posar la distància a 0, posem la distància a 5 per si després es volen tornar a afegir com a amistats
-    distancies[id_usuari][id_amistat_a_eliminar] = 5;
-    distancies[id_amistat_a_eliminar][id_usuari] = 5;
+    distancies[id_usuari][id_elim_amis] = 5;
+    distancies[id_elim_amis][id_usuari] = 5;
+   
 }

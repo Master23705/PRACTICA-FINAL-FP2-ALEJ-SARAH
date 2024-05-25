@@ -28,7 +28,6 @@ int main() {
 
         switch (opcion) {
             case 1:
-                printf("\n********************************\n");
                 mostra_perfil(id_usuari);
                 break;
             case 2:
@@ -39,11 +38,8 @@ int main() {
                 afegir_amistat(id_usuari, distancies);
                 break;
             case 4:
-                printf("Introdueix l'ID de l'usuari del qual vols eliminar l'amistat");
-                int id_elim_amis; 
                 mostrar_amistats(id_usuari, distancies, num_usuaris);
-                scanf("%d", &id_elim_amis);
-                eliminar_amistats(id_usuari,distancies, id_elim_amis);
+                eliminar_amistats(id_usuari,distancies);
                 break;
             case 5:
                 printf("Adeu!\n");
