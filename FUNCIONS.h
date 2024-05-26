@@ -31,10 +31,10 @@ int llegir_usuaris(Usuari usuaris[], int *num_usuaris);
 int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris);
 void mostra_perfil(int id);
 void mostra_menu();
-void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris);
+int* mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris);
 void merge(Proper arr[], int l, int m, int r);
 void mergeSort(Proper arr[], int l, int r);
-int* usuaris_propers(int id, int distancies[][MAX_USERS]);
-void afegir_amistat(int id, int distancies[][MAX_USERS]);
-void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS]);
+int* usuaris_propers(int id, int distancies[][MAX_USERS], int* count);
+void afegir_amistat(int id, int distancies[][MAX_USERS], int* ids_propers, int count);
+void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int* amistats, int count);
 

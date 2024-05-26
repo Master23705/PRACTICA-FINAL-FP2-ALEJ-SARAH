@@ -3,12 +3,19 @@
 int main() {
     int opcion, id_usuari; 
     int num_usuaris;
+    int count;
     int distancies[MAX_USERS][MAX_USERS];
+    int* id_propers; 
+    int* amistats; 
 
     
     printf("Benvingut a FPBook!\n");
     printf("Introdueix el teu ID: \n");
-    scanf("%d", &id_usuari);
+        if (scanf("%d", &id_usuari) < 0 || id_usuari > MAX_USERS - 1) {
+            printf("ID no valid. Si us plau, introdueix un ID entre 0 y %d.\n", MAX_USERS-1);
+        }
+
+
    
 
     if (llegir_usuaris(usuaris, &num_usuaris) != 0) {
@@ -28,18 +35,19 @@ int main() {
 
         switch (opcion) {
             case 1:
+                printf("\n********************************\n");
                 mostra_perfil(id_usuari);
                 break;
             case 2:
                 mostrar_amistats(id_usuari, distancies, num_usuaris);
                 break;
             case 3:
-                usuaris_propers(id_usuari, distancies);
-                afegir_amistat(id_usuari, distancies);
+                id_propers = usuaris_propers(id_usuari, distancies, &count);
+                afegir_amistat(id_usuari, distancies, id_propers, count);
                 break;
             case 4:
-                mostrar_amistats(id_usuari, distancies, num_usuaris);
-                eliminar_amistats(id_usuari,distancies);
+                amistats = mostrar_amistats(id_usuari, distancies, num_usuaris);
+                eliminar_amistats(id_usuari,distancies, amistats, count);
                 break;
             case 5:
                 printf("Adeu!\n");
