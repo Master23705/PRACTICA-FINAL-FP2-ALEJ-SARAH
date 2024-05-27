@@ -47,7 +47,7 @@ int main() {
                 break;
             case 4:
                 amistats = mostrar_amistats(id_usuari, distancies, num_usuaris);
-                eliminar_amistats(id_usuari,distancies, amistats, count);
+                eliminar_amistats(id_usuari,distancies, count);
                 break;
             case 5:
                 printf("Adeu!\n");

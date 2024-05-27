@@ -242,7 +242,6 @@ void afegir_amistat(int id_usuari, int distancies[][MAX_USERS],int* ids_propers,
         for (int i = 0; i < count; i++) {
             if (ids_propers[i] == id_nova_amistat) {
                 id_valid = 1;
-                break;
             }
         }
         if (!id_valid) {
@@ -262,9 +261,9 @@ void afegir_amistat(int id_usuari, int distancies[][MAX_USERS],int* ids_propers,
  * @param distancies Matriu de distàncies entre usuaris.
  * @param id_amistat_a_eliminar Identificador de l'amistat a eliminar.
  */
-void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int* amistats, int count) {
+void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int count) {
     int id_elim_amis;
-    printf("Vols eliminar algun usuari de les teves amistats? (si/no) ");
+    printf("Vols eliminar algun usuari de les teves amistats? (si/no): ");
     char resposta[2];
     scanf("%s", resposta);
     int es_si = ((resposta[0] == 's' || resposta[0] == 'S') &&
@@ -276,9 +275,8 @@ void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int* amistats
 
         int id_valid = 0;
         for (int i = 0; i < count; i++) {
-            if (amistats[i] == id_elim_amis) {
+            if (distancies[id_usuari][id_elim_amis]== -1) {
                 id_valid = 1;
-                break;
             }
         }
         if (!id_valid) {

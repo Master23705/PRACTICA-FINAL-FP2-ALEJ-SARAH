@@ -36,5 +36,5 @@ void merge(Proper arr[], int l, int m, int r);
 void mergeSort(Proper arr[], int l, int r);
 int* usuaris_propers(int id, int distancies[][MAX_USERS], int* count);
 void afegir_amistat(int id, int distancies[][MAX_USERS], int* ids_propers, int count);
-void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int* amistats, int count);
+void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int count);
 
