@@ -31,7 +31,7 @@ int llegir_usuaris(Usuari usuaris[], int *num_usuaris);
 int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris);
 void mostra_perfil(int id);
 void mostra_menu();
-int* mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris);
+void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris);
 void merge(Proper arr[], int l, int m, int r);
 void mergeSort(Proper arr[], int l, int r);
 int* usuaris_propers(int id, int distancies[][MAX_USERS], int* count);

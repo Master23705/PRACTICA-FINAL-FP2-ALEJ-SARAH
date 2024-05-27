@@ -35,7 +35,6 @@ int main() {
 
         switch (opcion) {
             case 1:
-                printf("\n********************************\n");
                 mostra_perfil(id_usuari);
                 break;
             case 2:
@@ -46,7 +45,7 @@ int main() {
                 afegir_amistat(id_usuari, distancies, id_propers, count);
                 break;
             case 4:
-                amistats = mostrar_amistats(id_usuari, distancies, num_usuaris);
+                mostrar_amistats(id_usuari, distancies, num_usuaris);
                 eliminar_amistats(id_usuari,distancies, count);
                 break;
             case 5:
