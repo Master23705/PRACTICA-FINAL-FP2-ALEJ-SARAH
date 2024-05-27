@@ -188,6 +188,7 @@ void mergeSort(Proper arr[], int l, int r) {
  * 
  * @param id Identificador de l'usuari.
  * @param distancies Matriu de distàncies entre usuaris.
+ * @param count Punter a una variable on es guardarà el nombre d'usuaris propers.
  * @return Punter a un array d'enters amb els IDs dels usuaris més propers.
  */
 int* usuaris_propers(int id, int distancies[][MAX_USERS], int* count) {
@@ -221,6 +222,8 @@ int* usuaris_propers(int id, int distancies[][MAX_USERS], int* count) {
  * 
  * @param id Identificador de l'usuari principal.
  * @param distancies Matriu de distàncies entre usuaris.
+ * @param ids_propers Array amb els IDs dels usuaris propers.
+ * @param count Nombre d'usuaris propers.
  */
 void afegir_amistat(int id_usuari, int distancies[][MAX_USERS],int* ids_propers, int count) {
     int id_nova_amistat;
@@ -234,7 +237,7 @@ void afegir_amistat(int id_usuari, int distancies[][MAX_USERS],int* ids_propers,
         printf("Introdueix l'ID de l'usuari amb el que vols afegir amistat: ");
         scanf("%d", &id_nova_amistat);
 
-        // Comprobar si el ID está en la lista ids_propers
+        // Comprobar si el ID está en la llista ids_propers
         int id_valid = 0;
         for (int i = 0; i < count; i++) {
             if (ids_propers[i] == id_nova_amistat) {
