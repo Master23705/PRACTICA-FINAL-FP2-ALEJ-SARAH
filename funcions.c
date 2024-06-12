@@ -13,9 +13,10 @@ Usuari usuaris[MAX_USERS];
  */
 
 int llegir_usuaris(Usuari usuaris[], int *num_usuaris) {
+    int r;
     FILE *fitxer = fopen("usuaris.txt", "r");
     if (fitxer == NULL) {
-        return 1;
+        r = 1;
     }
 
     fscanf(fitxer, "%d", num_usuaris);
@@ -25,7 +26,8 @@ int llegir_usuaris(Usuari usuaris[], int *num_usuaris) {
     }
 
     fclose(fitxer);
-    return 0;
+    r = 0;
+    return r;
 }
 
 /**
@@ -36,9 +38,10 @@ int llegir_usuaris(Usuari usuaris[], int *num_usuaris) {
  */
 
 int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
+    int r; 
     FILE *fitxer = fopen("propers.txt", "r");
     if (fitxer == NULL) {
-        return 1;
+        r = 1;
     }
     // Leemos la primera línea y no hacemos nada con ella
     fscanf(fitxer, "%d", &distancies[0][0]);
@@ -49,7 +52,8 @@ int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
     }
     
     fclose(fitxer);
-    return 0;
+    r = 0;
+    return r;
 }
 
  /**
@@ -60,15 +64,16 @@ int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
 void mostra_perfil(int id) {
     if (id < 0 || id >= MAX_USERS || usuaris[id].id == -1) {
         printf("Error: ID de l'usuari no valid.\n");
-        return;
-    }
-    printf("\n********************************\n");
-    printf("Perfil de l'usuari amb ID %d:\n", usuaris[id].id);
-    printf("Nom: %s\n", usuaris[id].nom);
-    printf("Poblacio: %s\n", usuaris[id].poblacio);
-    printf("Sexe: %s\n", usuaris[id].sexe);
-    printf("Data de naixement: %s\n", usuaris[id].data_naixement);
-    printf("\n********************************\n");
+    } else {
+        printf("\n********************************\n");
+        printf("Perfil de l'usuari amb ID %d:\n", usuaris[id].id);
+        printf("Nom: %s\n", usuaris[id].nom);
+        printf("Poblacio: %s\n", usuaris[id].poblacio);
+        printf("Sexe: %s\n", usuaris[id].sexe);
+        printf("Data de naixement: %s\n", usuaris[id].data_naixement);
+        printf("\n********************************\n");
+    } 
+
 }
 
 /**
