@@ -66,6 +66,29 @@ int llegir_distancies(int **distancies, int num_usuaris) {
 }
 
 /**
+ * @brief Inicializa los datos de usuarios y distancias.
+ * @param usuaris Puntero doble a un arreglo de estructuras Usuari, que será llenado con los datos leídos.
+ * @param distancies Puntero doble a un arreglo de enteros, que será llenado con las distancias leídas.
+ * @param num_usuaris Puntero a un entero que contendrá el número de usuarios leídos.
+ * @return Un entero que indica el estado de la inicialización: 0 si es exitoso, 1 si hubo un error.
+ */
+int inicializar_datos(Usuari** usuaris, int** distancies, int* num_usuaris) {
+    int r = 0;
+    if (llegir_usuaris(usuaris, num_usuaris)) {
+        printf("No s'ha pogut llegir el fitxer d'usuaris.\n");
+        r = 1;
+    }
+
+    if (llegir_distancies(distancies, *num_usuaris)) {
+        printf("No s'ha pogut llegir el fitxer de distàncies.\n");
+        free(*usuaris);
+        r = 1;
+    }
+
+    return r;
+}
+
+/**
  * @brief Mostra el perfil d'un usuari
  * @param id ID de l'usuari
  */
@@ -207,12 +230,39 @@ int* usuaris_propers(int id, int *distancies, int num_usuaris, int *count) {
 }
 
 /**
- * Afegeix una amistat entre usuaris.
+ * @brief Escriu en la matriu de fitxers
+ * @param distancies Matriu de distàncies entre usuaris.
+ * @param num_usuaris Nombre total d'usuaris.
+ * @return 0 si s'escriu correctament, 1 en cas d'error.
+ */
+int escriure_en_fitxer(int *distancies, int num_usuaris) {
+    int r = 0;
+    FILE *fitxer = fopen("propers.txt", "w");
+    if (fitxer == NULL) {
+        printf("Error: No s'ha pogut obrir el fitxer propers.txt.\n");
+        r = 1;
+    }
+
+    fprintf(fitxer, "%d\n", num_usuaris);
+    for (int i = 0; i < num_usuaris; i++) {
+        for (int j = 0; j < num_usuaris; j++) {
+            fprintf(fitxer, "%d ", distancies[i * num_usuaris + j]);
+        }
+        fprintf(fitxer, "\n");
+    }
+    
+    fclose(fitxer);
+    return r;
+}
+
+/**
+ * Afegeix una amistat entre usuaris i actualitza el fitxer de distàncies.
  * 
- * @param id Identificador de l'usuari principal.
+ * @param id_usuari Identificador de l'usuari principal.
  * @param distancies Matriu de distàncies entre usuaris.
  * @param ids_propers Array amb els IDs dels usuaris propers.
  * @param count Nombre d'usuaris propers.
+ * @param num_usuaris Nombre total d'usuaris.
  */
 void afegir_amistat(int id_usuari, int *distancies, int *ids_propers, int count, int num_usuaris) {
     int id_nova_amistat;
@@ -231,6 +281,11 @@ void afegir_amistat(int id_usuari, int *distancies, int *ids_propers, int count,
             distancies[id_usuari * num_usuaris + id_nova_amistat] = -1;
             distancies[id_nova_amistat * num_usuaris + id_usuari] = -1;
             printf("Amistat afegida correctament amb l'usuari %d.\n", id_nova_amistat);
+
+            // Actualitzar el fitxer de distàncies
+            if (escriure_en_fitxer(distancies, num_usuaris)) {
+                printf("Error: No s'ha pogut actualitzar el fitxer de distàncies.\n");
+            }
         } else {
             printf("ID no valid.\n");
         }
@@ -238,10 +293,11 @@ void afegir_amistat(int id_usuari, int *distancies, int *ids_propers, int count,
 }
 
 /**
- * Elimina una amistat entre usuaris.
+ * Elimina una amistat entre usuaris i actualitza el fitxer de distàncies.
  * 
  * @param id Identificador de l'usuari principal.
  * @param distancies Matriu de distàncies entre usuaris.
+ * @param num_usuaris Nombre total d'usuaris.
  */
 void eliminar_amistat(int id, int *distancies, int num_usuaris) {
     int id_amistat_eliminar;
@@ -250,9 +306,14 @@ void eliminar_amistat(int id, int *distancies, int num_usuaris) {
     
     if (id_amistat_eliminar >= 0 && id_amistat_eliminar < num_usuaris && id_amistat_eliminar != id) {
         // Eliminar amistat en ambdues direccions
-        distancies[id * num_usuaris + id_amistat_eliminar] = 0;
-        distancies[id_amistat_eliminar * num_usuaris + id] = 0;
+        distancies[id * num_usuaris + id_amistat_eliminar] = 5;
+        distancies[id_amistat_eliminar * num_usuaris + id] = 5;
         printf("Amistat eliminada correctament amb l'usuari %d.\n", id_amistat_eliminar);
+
+        // Actualitzar el fitxer de distàncies
+        if (escriure_en_fitxer(distancies, num_usuaris)) {
+            printf("Error: No s'ha pogut actualitzar el fitxer de distàncies.\n");
+        }
     } else {
         printf("ID no valid.\n");
     }

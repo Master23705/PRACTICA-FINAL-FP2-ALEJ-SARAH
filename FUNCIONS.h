@@ -20,6 +20,7 @@ typedef struct {
 extern Usuari *usuaris;
 extern int *distancies;
 
+int inicializar_datos(Usuari** usuaris, int** distancies, int* num_usuaris);
 int llegir_usuaris(Usuari **usuaris, int *num_usuaris);
 int llegir_distancies(int **distancies, int num_usuaris);
 void mostra_perfil(int id, Usuari *usuaris);
@@ -27,6 +28,7 @@ void mostra_menu();
 void mostrar_amistats(int id, int *distancies, int num_usuaris, Usuari *usuaris);
 void mergeSort(Proper arr[], int l, int r);
 int* usuaris_propers(int id, int *distancies, int num_usuaris, int *count);
+int escriure_en_fitxer(int *distancies, int num_usuaris);
 void afegir_amistat(int id, int *distancies, int *ids_propers, int count, int num_usuaris);
 void eliminar_amistat(int id, int *distancies, int num_usuaris);
 

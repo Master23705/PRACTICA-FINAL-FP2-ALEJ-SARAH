@@ -4,25 +4,16 @@
 #include <string.h>
 
 int main() {
-    int id_usuari, opcio, count;
+    int id_usuari, opcio, count, r;
     int num_usuaris;
     int *ids_propers = NULL;
 
-    if (llegir_usuaris(&usuaris, &num_usuaris)) {
-        printf("No s'ha pogut llegir el fitxer d'usuaris.\n");
-        return 1;
-    }
-
-    if (llegir_distancies(&distancies, num_usuaris)) {
-        printf("No s'ha pogut llegir el fitxer de distàncies.\n");
-        free(usuaris);
-        return 1;
-    }
+    r = inicializar_datos(&usuaris, &distancies, &num_usuaris);
 
     printf("Introdueix el teu ID d'usuari: ");
     scanf("%d", &id_usuari);
 
-    while (1) {
+    while (r == 0) {
         mostra_menu();
         scanf("%d", &opcio);
 
@@ -45,7 +36,7 @@ int main() {
                 printf("Sortint...\n");
                 free(usuaris);
                 free(distancies);
-                return 0;
+                break;
             default:
                 printf("Opcio no valida.\n");
         }
