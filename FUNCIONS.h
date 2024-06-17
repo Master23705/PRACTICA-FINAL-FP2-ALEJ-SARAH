@@ -1,40 +1,33 @@
+#ifndef FUNCIONS_H
 #define FUNCIONS_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#define MAX_USERS 100
+#define MAX_STRING 50
 
-#define MAX_USERS 10 //Màxim de usuaris que es poden llegir
-#define MAX_STR 20   //Màxim de caràcters per string
-
-//Estructura per guardar la informació dels usuaris
 typedef struct {
-    int id;                        //Identificador de l'usuari
-    char nom[MAX_STR];             //Nom de l'usuari
-    char poblacio[MAX_STR];        //Població de l'usuari
-    char sexe[MAX_STR];            //Sexe de l'usuari
-    char data_naixement[MAX_STR];  //Data de naixement de l'usuari
+    int id;
+    char nom[MAX_STRING];
+    char sexe[MAX_STRING];
+    char poblacio[MAX_STRING];
+    char data_naixement[MAX_STRING];
 } Usuari;
 
-//Estructura per guardar la informació dels usuaris propers
 typedef struct {
-    int id;          //Identificador de l'usuari
-    int distancia;   //Distància de l'usuari a un altre usuari
+    int id;
+    int distancia;
 } Proper;
 
-//Declaració de variables globals
-extern Usuari usuaris[MAX_USERS];  
-extern Proper propers[MAX_USERS];  
+extern Usuari *usuaris;
+extern int *distancies;
 
-//Declaració de funcions
-int llegir_usuaris(Usuari usuaris[], int *num_usuaris);
-int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris);
-void mostra_perfil(int id);
+int llegir_usuaris(Usuari **usuaris, int *num_usuaris);
+int llegir_distancies(int **distancies, int num_usuaris);
+void mostra_perfil(int id, Usuari *usuaris);
 void mostra_menu();
-void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris);
-void merge(Proper arr[], int l, int m, int r);
+void mostrar_amistats(int id, int *distancies, int num_usuaris, Usuari *usuaris);
 void mergeSort(Proper arr[], int l, int r);
-int* usuaris_propers(int id, int distancies[][MAX_USERS], int* count);
-void afegir_amistat(int id, int distancies[][MAX_USERS], int* ids_propers, int count);
-void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int count);
+int* usuaris_propers(int id, int *distancies, int num_usuaris, int *count);
+void afegir_amistat(int id, int *distancies, int *ids_propers, int count, int num_usuaris);
+void eliminar_amistat(int id, int *distancies, int num_usuaris);
 
+#endif
