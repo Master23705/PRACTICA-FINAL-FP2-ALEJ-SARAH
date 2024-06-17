@@ -1,62 +1,55 @@
 #include "FUNCIONS.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int main() {
-    int opcion, id_usuari; 
+    int id_usuari, opcio, count;
     int num_usuaris;
-    int count;
-    int distancies[MAX_USERS][MAX_USERS];
-    int* id_propers; 
-    int* amistats; 
-    int r;
+    int *ids_propers = NULL;
 
-    
-    printf("Benvingut a FPBook!\n");
-    printf("Introdueix el teu ID: \n");
-        if (scanf("%d", &id_usuari) < 0 || id_usuari > MAX_USERS - 1) {
-            printf("ID no valid. Si us plau, introdueix un ID entre 0 y %d.\n", MAX_USERS-1);
-        }
-
-
-   
-
-    if (llegir_usuaris(usuaris, &num_usuaris) != 0) {
-        printf("Error al llegir l'arxiu de usuaris. Terminant el programa.\n");
-        r = 1;
-    }
-    
-    if (llegir_distancies(distancies, num_usuaris) != 0) {
-        printf("Error al llegir l'arxiu de distancies. Terminant el programa.\n");
-        r = 1; 
+    if (llegir_usuaris(&usuaris, &num_usuaris)) {
+        printf("No s'ha pogut llegir el fitxer d'usuaris.\n");
+        return 1;
     }
 
-    do {
+    if (llegir_distancies(&distancies, num_usuaris)) {
+        printf("No s'ha pogut llegir el fitxer de distàncies.\n");
+        free(usuaris);
+        return 1;
+    }
+
+    printf("Introdueix el teu ID d'usuari: ");
+    scanf("%d", &id_usuari);
+
+    while (1) {
         mostra_menu();
-        scanf("%d", &opcion);
-        
+        scanf("%d", &opcio);
 
-        switch (opcion) {
+        switch (opcio) {
             case 1:
-                mostra_perfil(id_usuari);
+                mostra_perfil(id_usuari, usuaris);
                 break;
             case 2:
-                mostrar_amistats(id_usuari, distancies, num_usuaris);
+                mostrar_amistats(id_usuari, distancies, num_usuaris, usuaris);
                 break;
             case 3:
-                id_propers = usuaris_propers(id_usuari, distancies, &count);
-                afegir_amistat(id_usuari, distancies, id_propers, count);
+                ids_propers = usuaris_propers(id_usuari, distancies, num_usuaris, &count);
+                afegir_amistat(id_usuari, distancies, ids_propers, count, num_usuaris);
+                free(ids_propers);  // Alliberem la memòria de ids_propers
                 break;
             case 4:
-                mostrar_amistats(id_usuari, distancies, num_usuaris);
-                eliminar_amistats(id_usuari,distancies, count);
+                eliminar_amistat(id_usuari, distancies, num_usuaris);
                 break;
             case 5:
-                printf("Adeu!\n");
-                r = 0; //Sortir del programa
+                printf("Sortint...\n");
+                free(usuaris);
+                free(distancies);
+                return 0;
             default:
-                printf("\nOpcio no valida, tria una opcio valida siusplau\n");
-                break;
+                printf("Opcio no valida.\n");
         }
-    } while (1); //Bucle infint amb el cual es pot surtir amb el return(0) de el case 4
-    
-    return r;
+    }
+
+    return 0;
 }
