@@ -1,68 +1,76 @@
-#include "FUNCIONS.H"
+#include "FUNCIONS.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-Usuari usuaris[MAX_USERS];
+Usuari *usuaris = NULL;
+int *distancies = NULL;
 
 /**
- * @brief Llegeix els ususaris des d'un fitxer
- * @param usuaris Array d'usuaris
+ * @brief Llegeix els usuaris des d'un fitxer
+ * @param usuaris Punter a un array d'usuaris
  * @param num_usuaris Punter al nombre d'usuaris
  * @return 0 si llegeix correctament, 1 en cas d'error
  */
-
-int llegir_usuaris(Usuari usuaris[], int *num_usuaris) {
+int llegir_usuaris(Usuari **usuaris, int *num_usuaris) {
     int r;
     FILE *fitxer = fopen("usuaris.txt", "r");
     if (fitxer == NULL) {
-        r = 1;
+        return 1;
     }
 
     fscanf(fitxer, "%d", num_usuaris);
+    *usuaris = malloc((*num_usuaris) * sizeof(Usuari));
+    if (*usuaris == NULL) {
+        fclose(fitxer);
+        return 1;
+    }
 
     for (int i = 0; i < *num_usuaris; i++) {
-        fscanf(fitxer, "%d %s %s %s %s", &usuaris[i].id, usuaris[i].nom, usuaris[i].sexe, usuaris[i].poblacio, usuaris[i].data_naixement);
+        fscanf(fitxer, "%d %s %s %s %s", &(*usuaris)[i].id, (*usuaris)[i].nom, (*usuaris)[i].sexe, (*usuaris)[i].poblacio, (*usuaris)[i].data_naixement);
     }
 
     fclose(fitxer);
-    r = 0;
-    return r;
+    return 0;
 }
 
 /**
- * @brief Llegeix les ditàncies des d'un fitxer
- * @param distancies Matriu de distànceis entre usuaris
+ * @brief Llegeix les distàncies des d'un fitxer
+ * @param distancies Matriu de distàncies entre usuaris
  * @param num_usuaris Nombre d'usuaris
  * @return 0 si llegeix correctament, 1 en cas d'error
  */
-
-int llegir_distancies(int distancies[][MAX_USERS], int num_usuaris) {
+int llegir_distancies(int **distancies, int num_usuaris) {
     int r; 
     FILE *fitxer = fopen("propers.txt", "r");
     if (fitxer == NULL) {
-        r = 1;
+        return 1;
     }
+
+    *distancies = malloc(num_usuaris * num_usuaris * sizeof(int));
+    if (*distancies == NULL) {
+        fclose(fitxer);
+        return 1;
+    }
+
     // Leemos la primera línea y no hacemos nada con ella
-    fscanf(fitxer, "%d", &distancies[0][0]);
+    fscanf(fitxer, "%d", &(*distancies)[0]);
     for (int i = 0; i < num_usuaris; i++) {
         for (int j = 0; j < num_usuaris; j++) {
-            fscanf(fitxer, "%d", &distancies[i][j]);
+            fscanf(fitxer, "%d", &(*distancies)[i * num_usuaris + j]);
         }
     }
     
     fclose(fitxer);
-    r = 0;
-    return r;
+    return 0;
 }
 
- /**
+/**
  * @brief Mostra el perfil d'un usuari
  * @param id ID de l'usuari
  */
-
-void mostra_perfil(int id) {
-    if (id < 0 || id >= MAX_USERS || usuaris[id].id == -1) {
+void mostra_perfil(int id, Usuari *usuaris) {
+    if (id < 0 || usuaris[id].id == -1) {
         printf("Error: ID de l'usuari no valid.\n");
     } else {
         printf("\n********************************\n");
@@ -72,14 +80,12 @@ void mostra_perfil(int id) {
         printf("Sexe: %s\n", usuaris[id].sexe);
         printf("Data de naixement: %s\n", usuaris[id].data_naixement);
         printf("\n********************************\n");
-    } 
-
+    }
 }
 
 /**
  * @brief Mostra el menú d'opcions
  */
-
 void mostra_menu() {
     printf("\nMenu:\n");
     printf("________________________________\n\n");
@@ -98,17 +104,14 @@ void mostra_menu() {
  * @param distancies Matriu de distancies entre usuaris
  * @param num_usuaris Nombre d'usuaris
  */
-
-void mostrar_amistats(int id, int distancies[][MAX_USERS], int num_usuaris) {
-    
+void mostrar_amistats(int id, int *distancies, int num_usuaris, Usuari *usuaris) {
     printf("\nAmistats de l'usuari amb ID %d:\n", usuaris[id].id);
     printf("\n********************************\n");
     for (int i = 0; i < num_usuaris; i++) {
-        if (distancies[id][i] == -1) {  
-            mostra_perfil(i);
+        if (distancies[id * num_usuaris + i] == -1) {  
+            mostra_perfil(i, usuaris);
         }
     }
-
 }
 
 /**
@@ -169,7 +172,6 @@ void mergeSort(Proper arr[], int l, int r) {
     }
 }
 
-
 /**
  * Troba els usuaris més propers a un usuari donat el seu ID.
  * 
@@ -178,27 +180,27 @@ void mergeSort(Proper arr[], int l, int r) {
  * @param count Punter a una variable on es guardarà el nombre d'usuaris propers.
  * @return Punter a un array d'enters amb els IDs dels usuaris més propers.
  */
-int* usuaris_propers(int id, int distancies[][MAX_USERS], int* count) {
+int* usuaris_propers(int id, int *distancies, int num_usuaris, int *count) {
     Proper propers[MAX_USERS];
     *count = 0;
     printf("\nUsuaris propers a tu:\n");
     printf("\n********************************\n");
     
-    for (int i = 0; i < MAX_USERS; i++) {
-        if (i != id && distancies[id][i] != -1) {
+    for (int i = 0; i < num_usuaris; i++) {
+        if (i != id && distancies[id * num_usuaris + i] != -1) {
             propers[*count].id = i;
-            propers[*count].distancia = distancies[id][i];
+            propers[*count].distancia = distancies[id * num_usuaris + i];
             (*count)++;
         }
     }
 
     mergeSort(propers, 0, *count - 1);
     
-    // Crear una llista para guardar els IDs de los usuaris propers
+    // Crear una llista per guardar els IDs dels usuaris propers
     int* ids_propers = malloc(*count * sizeof(int));
     for (int i = 0; i < *count; i++) {
         ids_propers[i] = propers[i].id;
-        mostra_perfil(ids_propers[i]);
+        mostra_perfil(ids_propers[i], usuaris);
     }
 
     return ids_propers;
@@ -212,31 +214,25 @@ int* usuaris_propers(int id, int distancies[][MAX_USERS], int* count) {
  * @param ids_propers Array amb els IDs dels usuaris propers.
  * @param count Nombre d'usuaris propers.
  */
-void afegir_amistat(int id_usuari, int distancies[][MAX_USERS],int* ids_propers, int count) {
+void afegir_amistat(int id_usuari, int *distancies, int *ids_propers, int count, int num_usuaris) {
     int id_nova_amistat;
     printf("Vols afegir amistat amb algun d'aquests usuaris? (si/no) ");
-    char resposta[2];
+    char resposta[3];
     scanf("%s", resposta);
     int es_si = ((resposta[0] == 's' || resposta[0] == 'S') &&
-             (resposta[1] == 'i' || resposta[1] == 'I'));
+                 (resposta[1] == 'i' || resposta[1] == 'I'));
 
     if (es_si) {
-        printf("Introdueix l'ID de l'usuari amb el que vols afegir amistat: ");
+        printf("Introdueix l'ID de l'usuari amb qui vols afegir amistat: ");
         scanf("%d", &id_nova_amistat);
-
-        // Comprobar si el ID está en la llista ids_propers
-        int id_valid = 0;
-        for (int i = 0; i < count; i++) {
-            if (ids_propers[i] == id_nova_amistat) {
-                id_valid = 1;
-            }
-        }
-        if (!id_valid) {
-            printf("Has introduit un ID no valid. L'usuari amb ID %d no es troba en la llista de noves amistats.\n", id_nova_amistat);
+        
+        if (id_nova_amistat >= 0 && id_nova_amistat < num_usuaris && id_nova_amistat != id_usuari) {
+            // Afegir amistat en ambdues direccions
+            distancies[id_usuari * num_usuaris + id_nova_amistat] = -1;
+            distancies[id_nova_amistat * num_usuaris + id_usuari] = -1;
+            printf("Amistat afegida correctament amb l'usuari %d.\n", id_nova_amistat);
         } else {
-            distancies[id_usuari][id_nova_amistat] = -1;
-            distancies[id_nova_amistat][id_usuari] = -1;
-            printf("S'ha introduit l'usuari amb ID %d com a amistat.\n", id_nova_amistat);
+            printf("ID no valid.\n");
         }
     }
 }
@@ -244,37 +240,20 @@ void afegir_amistat(int id_usuari, int distancies[][MAX_USERS],int* ids_propers,
 /**
  * Elimina una amistat entre usuaris.
  * 
- * @param id_usuari Identificador de l'usuari principal.
+ * @param id Identificador de l'usuari principal.
  * @param distancies Matriu de distàncies entre usuaris.
- * @param id_amistat_a_eliminar Identificador de l'amistat a eliminar.
  */
-void eliminar_amistats(int id_usuari, int distancies[][MAX_USERS], int count) {
-    int id_elim_amis;
-    printf("Vols eliminar algun usuari de les teves amistats? (si/no): ");
-    char resposta[2];
-    scanf("%s", resposta);
-    int es_si = ((resposta[0] == 's' || resposta[0] == 'S') &&
-             (resposta[1] == 'i' || resposta[1] == 'I'));
-
-    if (es_si) {
-        printf("Introdueix l'ID de l'usuari del qual vols eliminar l'amistat:");
-        scanf("%d", &id_elim_amis);
-
-        int id_valid = 0;
-        for (int i = 0; i < count; i++) {
-            if (distancies[id_usuari][id_elim_amis]== -1) {
-                id_valid = 1;
-            }
-        }
-        if (!id_valid) {
-            printf("Has introduit un ID no valid. L'usuari amb ID %d no es troba en la llista d'amistats.\n", id_elim_amis);
-        } else {
-            // Decisió de disseny: enlloc de posar la distància a 0, posem la distància a 5 per si després es volen tornar a afegir com a amistats
-            distancies[id_usuari][id_elim_amis] = 5;
-            distancies[id_elim_amis][id_usuari] = 5;
-            printf("S'ha eliminat l'usuari amb ID %d com a amistat.\n", id_elim_amis);
-        }
-
+void eliminar_amistat(int id, int *distancies, int num_usuaris) {
+    int id_amistat_eliminar;
+    printf("Introdueix l'ID de l'usuari amb qui vols eliminar amistat: ");
+    scanf("%d", &id_amistat_eliminar);
+    
+    if (id_amistat_eliminar >= 0 && id_amistat_eliminar < num_usuaris && id_amistat_eliminar != id) {
+        // Eliminar amistat en ambdues direccions
+        distancies[id * num_usuaris + id_amistat_eliminar] = 0;
+        distancies[id_amistat_eliminar * num_usuaris + id] = 0;
+        printf("Amistat eliminada correctament amb l'usuari %d.\n", id_amistat_eliminar);
+    } else {
+        printf("ID no valid.\n");
     }
-   
 }
