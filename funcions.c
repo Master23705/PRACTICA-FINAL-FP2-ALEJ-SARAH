@@ -335,55 +335,66 @@ void eliminar_amistat(int id, int *distancies, int num_usuaris) {
  * @param id_usuari ID de l'usuario que vol editar el seu perfil
  * @param usuaris Array dels usuaris
  */
-int editar_perfil(int id, Usuari *usuaris, int num_usuaris)
- {
+void editar_perfil(int id, Usuari *usuaris, int num_usuaris) {
     int opcion = 0;
     int ok;
-    
 
     while (opcion != 4) {
         mostrar_menu_edit_perfil();
         scanf("%d", &opcion);
 
-        switch (opcion) 
-        {
+        switch (opcion) {
             case 1:
                 printf("Introdueix el nou nom: ");
                 scanf("%s", usuaris[id].nom);
-            break;
+                break;
             case 2:
                 ok = 0;
-                while (ok == 0)
-                {
-                printf("Escogeix el nou sexe (Home/Dona): \n");
-                scanf("%s", usuaris[id].sexe);
-                if (usuaris[id].sexe != "Home" || usuaris[id].sexe != "HOME" ||usuaris[id].sexe != "home" || usuaris[id].sexe != "Dona" || usuaris[id].sexe != "dona" || usuaris[id].sexe != "DONA")
-                {
-                  printf("Sexe introduit no valid, introdueix Home o Dona\n");
+                while (ok == 0) {
+                    printf("Escogeix el nou sexe (Home/Dona): \n");
+                    scanf("%s", usuaris[id].sexe);
+                    // Comprovem que el sexe introduit sigui correcte
+                    if (strcmp(usuaris[id].sexe, "Home") == 0 || strcmp(usuaris[id].sexe, "Dona") == 0 ||
+                        strcmp(usuaris[id].sexe, "HOME") == 0 || strcmp(usuaris[id].sexe, "DONA") == 0 ||
+                        strcmp(usuaris[id].sexe, "home") == 0 || strcmp(usuaris[id].sexe, "dona") == 0) {
+                        ok = 1;
+                    } else {
+                        printf("Sexe introduit no valid, introdueix Home o Dona\n");
+                    }
                 }
-                else 
-                {
-                    ok = 1;
-                }  
-                } 
-            break;
+                break;
             case 3:
                 printf("Introdueix la nova poblacio: ");
                 scanf("%s", usuaris[id].poblacio);
                 break;
             case 4:
-                desar_dades();
+                desar_dades(usuaris, num_usuaris);
+                printf("Perfil actualitzat correctament.\n");
                 break;
             default:
-                printf("Opción no válida. Intenta de nuevo.\n");
+                printf("Opció no vàlida. Intenta de nou.\n");
         }
     }
 }
 
-void desar_dades (Usuari *usuaris, int num_usuaris)
-{
-    for (int i = 0; i < num_usuaris; i++)
-    {
-        fscanf(fi)
+/**
+ * @brief Desa les dades dels usuaris en un fitxer
+ * @param usuaris Array dels usuaris
+ * @param num_usuaris Nombre total d'usuaris
+ */
+void desar_dades(Usuari *usuaris, int num_usuaris) {
+    FILE *fitxer = fopen("usuaris.txt", "w");
+    if (fitxer == NULL) {
+        printf("Error: No s'ha pogut obrir el fitxer usuaris.txt.\n");
+        return;
     }
+
+    fprintf(fitxer, "%d\n", num_usuaris); 
+    // Guardem les dades dels usuaris en el fitxer
+    for (int i = 0; i < num_usuaris; i++) {
+        fprintf(fitxer, "%d %s %s %s %s\n", usuaris[i].id, usuaris[i].nom, usuaris[i].sexe, usuaris[i].poblacio, usuaris[i].data_naixement);
+    }
+
+    fclose(fitxer);
 }
+
