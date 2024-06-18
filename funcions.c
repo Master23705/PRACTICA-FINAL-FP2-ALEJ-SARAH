@@ -368,7 +368,7 @@ void editar_perfil(int id, Usuari *usuaris, int num_usuaris) {
                 scanf("%s", usuaris[id].poblacio);
                 break;
             case 4:
-                desar_dades(usuaris, num_usuaris);
+                desar_dades(id, usuaris, num_usuaris);
                 printf("Perfil actualitzat correctament.\n");
                 break;
             default:
@@ -382,19 +382,13 @@ void editar_perfil(int id, Usuari *usuaris, int num_usuaris) {
  * @param usuaris Array dels usuaris
  * @param num_usuaris Nombre total d'usuaris
  */
-void desar_dades(Usuari *usuaris, int num_usuaris) {
+void desar_dades(int id, Usuari *usuaris, int num_usuaris) {
     FILE *fitxer = fopen("usuaris.txt", "w");
     if (fitxer == NULL) {
         printf("Error: No s'ha pogut obrir el fitxer usuaris.txt.\n");
         return;
     }
-
-    fprintf(fitxer, "%d\n", num_usuaris); 
-    // Guardem les dades dels usuaris en el fitxer
-    for (int i = 0; i < num_usuaris; i++) {
-        fprintf(fitxer, "%d %s %s %s %s\n", usuaris[i].id, usuaris[i].nom, usuaris[i].sexe, usuaris[i].poblacio, usuaris[i].data_naixement);
-    }
-
+    fprintf(fitxer, "%d %s %s %s %s\n", usuaris[id].id, usuaris[id].nom, usuaris[id].sexe, usuaris[id].poblacio, usuaris[id].data_naixement);
     fclose(fitxer);
 }
 
