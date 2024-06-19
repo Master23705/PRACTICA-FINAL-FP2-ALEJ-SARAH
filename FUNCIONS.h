@@ -21,7 +21,7 @@ extern Usuari *usuaris;
 extern int *distancies;
 
 void editar_perfil(int id, Usuari * usuaris, int num_usuaris);
-void desar_dades(int id, Usuari *usuaris, int num_usuaris);
+void desar_dades(Usuari *usuaris, int num_usuaris);
 int inicialitzar_dades(Usuari** usuaris, int** distancies, int* num_usuaris);
 int llegir_usuaris(Usuari **usuaris, int *num_usuaris);
 int llegir_distancies(int **distancies, int num_usuaris);
