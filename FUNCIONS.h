@@ -33,6 +33,5 @@ int* usuaris_propers(int id, int *distancies, int num_usuaris, int *count);
 int escriure_en_fitxer_distancies(int *distancies, int num_usuaris);
 void afegir_amistat(int id, int *distancies, int *ids_propers, int count, int num_usuaris);
 void eliminar_amistat(int id, int *distancies, int num_usuaris);
-int escriure_en_fitxer_usuaris();
 
 #endif

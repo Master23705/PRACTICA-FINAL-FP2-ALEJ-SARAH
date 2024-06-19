@@ -13,17 +13,17 @@ int *distancies = NULL;
  * @return 0 si llegeix correctament, 1 en cas d'error
  */
 int llegir_usuaris(Usuari **usuaris, int *num_usuaris) {
-    int r;
+    int r = 0;
     FILE *fitxer = fopen("usuaris.txt", "r");
     if (fitxer == NULL) {
-        return 1;
+        r = 1;
     }
 
     fscanf(fitxer, "%d", num_usuaris);
     *usuaris = malloc((*num_usuaris) * sizeof(Usuari));
     if (*usuaris == NULL) {
         fclose(fitxer);
-        return 1;
+        r = 1;
     }
 
     for (int i = 0; i < *num_usuaris; i++) {
@@ -31,7 +31,7 @@ int llegir_usuaris(Usuari **usuaris, int *num_usuaris) {
     }
 
     fclose(fitxer);
-    return 0;
+    return r;
 }
 
 /**
@@ -53,7 +53,7 @@ int llegir_distancies(int **distancies, int num_usuaris) {
         r = 1;
     }
 
-    // Leemos la primera línea y no hacemos nada con ella
+    // Llegim la primera línea i no fem res amb ella perquè no ens interessa
     fscanf(fitxer, "%d", &(*distancies)[0]);
     for (int i = 0; i < num_usuaris; i++) {
         for (int j = 0; j < num_usuaris; j++) {
@@ -66,11 +66,11 @@ int llegir_distancies(int **distancies, int num_usuaris) {
 }
 
 /**
- * @brief Inicialitza les dades d'usuaris i distancies.
- * @param usuaris Punter doble a un de estructuras Usuari, que será llenado con los datos leídos.
- * @param distancies Puntero doble a un arreglo de enteros, que será llenado con las distancias leídas.
- * @param num_usuaris Puntero a un entero que contendrá el número de usuarios leídos.
- * @return Un entero que indica el estado de la inicialización: 0 si es exitoso, 1 si hubo un error.
+ * @brief Inicialitza les dades d'usuaris i distàncies.
+ * @param usuaris Punter doble a una estructura d'Usuari, que serà omplerta amb les dades llegides.
+ * @param distancies Punter doble a una matriu d'enters, que serà omplerta amb les distàncies llegides.
+ * @param num_usuaris Punter a un enter que contindrà el nombre d'usuaris llegits.
+ * @return Un enter que indica l'estat de la inicialització: 0 si és exitós, 1 si hi ha hagut un error.
  */
 int inicialitzar_dades(Usuari** usuaris, int** distancies, int* num_usuaris) {
     int r = 0;
@@ -138,6 +138,9 @@ void mostrar_amistats(int id, int *distancies, int num_usuaris, Usuari *usuaris)
     }
 }
 
+/**
+ * @brief Mostra el menú d'opcions
+ */
 void mostrar_menu_edit_perfil()
 {
     printf("________________________________\n\n");
@@ -332,8 +335,9 @@ void eliminar_amistat(int id, int *distancies, int num_usuaris) {
 }
 /**
  * @brief Edita el perfil d'un usuari
- * @param id_usuari ID de l'usuario que vol editar el seu perfil
+ * @param id_usuari ID de l'usuari que vol editar el seu perfil
  * @param usuaris Array dels usuaris
+ * @param num_usuaris Nombre total d'usuaris
  */
 void editar_perfil(int id, Usuari *usuaris, int num_usuaris) {
     int opcion = 0;
